@@ -4,6 +4,8 @@ Get Started
 
 :link_to_translation:`zh_CN:[中文]`
 
+.. Please keep README.md in sync with these instructions.
+
 This document is intended to help you set up the software development environment for the hardware based on the ESP32 chip by Espressif.
 
 After that, a simple example will show you how to use ESP-IDF (Espressif IoT Development Framework) for menu configuration, then building, and flashing firmware onto an ESP32 board.
@@ -219,13 +221,19 @@ In the terminal where you are going to use ESP-IDF, run:
 
 Note the space between the leading dot and the path!
 
-You can also create an alias for the export script to your ``.profile`` or ``.bash_profile`` script. This way you can set up the environment in a new terminal window by typing ``get_idf``:
+If you plan to use esp-idf frequently, you can create an alias for executing ``export.sh``:
 
-.. code-block:: bash
+1.  Copy and paste the following command to your shell's profile (``.profile``, ``.bashrc``, ``.zprofile``, etc.)
 
-    alias get_idf='. $HOME/esp/esp-idf/export.sh'
+    .. code-block:: bash
 
-Note that it is not recommended to source ``export.sh`` from the profile script directly. Doing so activates IDF virtual environment in every terminal session (even in those where IDF is not needed), defeating the purpose of the virtual environment and likely affecting other software.
+        alias get_idf='. $HOME/esp/esp-idf/export.sh'
+
+2.  Refresh the configuration by restarting the terminal session or by running ``source [path to profile]``, for example, ``source ~/.bashrc``.
+
+Now you can run ``get_idf`` to set up or refresh the esp-idf environment in any terminal session.
+
+Technically, you can add ``export.sh`` to your shell's profile directly; however, it is not recommended. Doing so activates IDF virtual environment in every terminal session (including those where IDF is not needed), defeating the purpose of the virtual environment and likely affecting other software.
 
 .. _get-started-start-project:
 
