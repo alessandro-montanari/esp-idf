@@ -31,6 +31,12 @@
 #define HOST_IP_ADDR CONFIG_EXAMPLE_IPV6_ADDR
 #endif
 
+#ifdef CONFIG_EXAMPLE_CONNECT_ETHERNET
+#define EXAMPLE_INTERFACE TCPIP_ADAPTER_IF_ETH
+#elif CONFIG_EXAMPLE_CONNECT_WIFI
+#define EXAMPLE_INTERFACE TCPIP_ADAPTER_IF_STA
+#endif
+
 #define PORT CONFIG_EXAMPLE_PORT
 
 static const char *TAG = "example";
@@ -60,7 +66,7 @@ static void udp_client_task(void *pvParameters)
         dest_addr.sin6_family = AF_INET6;
         dest_addr.sin6_port = htons(PORT);
         // Setting scope_id to the connecting interface for correct routing if IPv6 Local Link supplied
-        dest_addr.sin6_scope_id = esp_netif_get_netif_impl_index(EXAMPLE_INTERFACE);
+        dest_addr.sin6_scope_id = tcpip_adapter_get_netif_index(EXAMPLE_INTERFACE);
         addr_family = AF_INET6;
         ip_protocol = IPPROTO_IPV6;
         inet6_ntoa_r(dest_addr.sin6_addr, addr_str, sizeof(addr_str) - 1);
@@ -82,7 +88,7 @@ static void udp_client_task(void *pvParameters)
             }
             ESP_LOGI(TAG, "Message sent");
 
-            struct sockaddr_in source_addr; // Large enough for both IPv4 or IPv6
+            struct sockaddr_storage source_addr; // Large enough for both IPv4 or IPv6
             socklen_t socklen = sizeof(source_addr);
             int len = recvfrom(sock, rx_buffer, sizeof(rx_buffer) - 1, 0, (struct sockaddr *)&source_addr, &socklen);
 
